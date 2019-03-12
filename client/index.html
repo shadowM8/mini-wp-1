@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="shortcut icon" type="image/x-icon" href="assets/icons/se.png" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
+        integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
+    <!-- Icons -->
+    <link href="/assets/vendor/nucleo/css/nucleo.css" rel="stylesheet">
+    <link href="/assets/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <!-- Theme CSS -->
+    <link type="text/css" href="/assets/css/argon.min.css" rel="stylesheet">
+
+    <title>Simple - WordPress</title>
+</head>
+
+<body>
+    <div id="app">
+        <!-- auth -->
+        <div id="auth" v-if="isLogin === false"
+            class="container-fluid bg-primary d-flex justify-content-center align-items-center"
+            style="min-height:100vh">
+            <div class="d-flex flex-column" style="width:40%">
+                <div class="d-flex flex-column  ">
+                    <img src="/assets/img/picture/undraw_live_collaboration_2r4y.svg" alt="" style="width:40%;"
+                        class="d-flex flex-column align-self-center  " />
+                    <h1 style="color:white;" class="d-flex align-self-center"><i class="fas fa-feather-alt"></i>
+                        Simple Word-Press</h1>
+                    <h6 style="color:white;" class="d-flex align-self-center">Simple-WordPress web-app built with
+                        mongoose, vue & express</h6>
+                    <button type="button" class="btn btn-warning mt-2" data-toggle="modal"
+                        data-target="#exampleModal">Create an
+                        account</button>
+                    <button type="button" class="btn btn-info mt-2" data-toggle="modal"
+                        data-target="#exampleModal2">Sign
+                        In</button>
+                    <!-- <h6 style="color:white;" class="d-flex align-self-center mt-3 mb-3">or</h6> -->
+                    <!-- <div class="g-signin2" data-onsuccess="onSignIn" data-width="400" data-longtitle="true"></div> -->
+                </div>
+            </div>
+        </div>
+
+        <!-- registration form modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Register</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="registrationForm" @submit.prevent="register">
+                            <h6 id="registrationError"></h6>
+                            <div class="form-group">
+                                <label for="email1" class="col-form-label">email</label>
+                                <input type="text" class="form-control" id="email1" v-model="email"
+                                    placeholder="e.g. johnDoe1@gmail.com">
+                            </div>
+                            <div class="form-group">
+                                <label for="password1" class="col-form-label">password</label>
+                                <input type="password" class="form-control" id="password1" v-model="password"
+                                    placeholder="enter your password here">
+                            </div>
+                            <div class="form-group">
+                                <label for="fullname" class="col-form-label">full name</label>
+                                <input type="text" class="form-control" id="fullName" v-model="fullName"
+                                    placeholder="enter your fullname here">
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="submit button" class="btn btn-primary">Create Account</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- login form modal -->
+        <div class="modal fade" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel2"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel2">Login</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="loginForm" @submit.prevent="login">
+                            <h6 id="loginError" v-if="errorMsg">{{errorMsg}}</h6>
+                            <div class="form-group">
+                                <label for="email2" class="col-form-label">email</label>
+                                <input type="text" class="form-control" id="email2" v-model="email">
+                            </div>
+                            <div class="form-group">
+                                <label for="password2" class="col-form-label">password</label>
+                                <input type="password" class="form-control" id="password2" v-model="password">
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="submit button" class="btn btn-primary">Sign In</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- header nav -->
+        <nav id="header" v-if="header === true" class="navbar navbar-dark shadow "
+            style="background-color:rgb(96, 117, 225)">
+            <a class="navbar-brand" href="#" style="font-size:20px"><i class="fas fa-feather-alt"></i> Simple-WP </a>
+            <!-- navbar search bar -->
+            <form class="form-inline my-1 my-lg-0">
+                <input class="form-control mr-sm-2" type="search" placeholder="Search by article title..."
+                    aria-label="Search">
+                <button class="btn my-1 my-sm-0" style="background-color:rgb(13, 61, 94); color:white;"
+                    type="submit">Search</button>
+            </form>
+            <button type="button" class="btn rounded"
+                style="background-color:rgb(13, 61, 94); color:white;" @click="writeArticle">
+                <i class="fas fa-newspaper"></i> Write new Article</button>
+
+            <div class="btn-group">
+                <button type="button" class="btn dropdown-toggle" style="background-color: #CCE6F4;"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-user"></i>
+                </button>
+
+                <div class="dropdown-menu dropdown-menu-right">
+                    <button class="dropdown-item" type="button">Update profile</button>
+                    <button class="dropdown-item" type="button" @click="logout">Log out</button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- navigation bar -->
+        <div id="navigation" v-if="nav === true" class="row mt-3 container">
+            <div class="col-3">
+                <div class="nav flex-column nav-pills bg-light border rounded shadow" id="v-pills-tab" role="tablist"
+                    aria-orientation="vertical">
+                    <a class="nav-link active my-1" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home"
+                        role="tab" aria-controls="v-pills-home" aria-selected="true">All Article</a>
+                    <a class="nav-link my-1" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-profile"
+                        role="tab" aria-controls="v-pills-profile" aria-selected="false">Tag</a>
+                    <a class="nav-link my-1" id="v-pills-messages-tab" data-toggle="pill" href="#v-pills-messages"
+                        role="tab" aria-controls="v-pills-messages" aria-selected="false">Tag Setting</a>
+                    <a class="nav-link my-1" id="v-pills-settings-tab" data-toggle="pill" href="#v-pills-settings"
+                        role="tab" aria-controls="v-pills-settings" aria-selected="false">Settings</a>
+                </div>
+            </div>
+            <div class="col-9">
+                <div class="tab-content border rounded shadow" id="v-pills-tabContent"
+                    style="overflow-y:auto;max-height:500px">
+                    <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel"
+                        aria-labelledby="v-pills-home-tab">
+                        Default setelah login, masuk ke sini
+                        List All Article
+                        <div class="card border rounded mb-3">
+                            <div class="card-header">
+
+                                <div class="d-flex">
+                                    <div class="mr-2">
+                                        <img src="assets/icons/se.png" style="width:100px"
+                                            class="img-fluid border border-primary rounded-circle" alt="article-picz">
+                                    </div>
+                                    <div class="d-flex align-items-center">
+                                        Creator Name
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body text-primary">
+                                <h5 class="card-title">Article 1</h5>
+                                <div class="d-flex">
+                                    <div id="article-picture" class="mr-3">
+                                        <img src="assets/icons/se.png" style="height:150px;width:300px"
+                                            class="img-fluid border border-primary" alt="article-picz">
+                                    </div>
+                                    <div id="article-content">
+                                        <p class="card-text">Some quick example text to build on the card title and make
+                                            up
+                                            the bulk
+                                            of the card's content.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="card border rounded mb-3">
+                            <div class="card-header">
+
+                                <div class="d-flex">
+                                    <div class="mr-2">
+                                        <img src="assets/icons/se.png" style="width:100px"
+                                            class="img-fluid border border-primary rounded-circle" alt="article-picz">
+                                    </div>
+                                    <div class="d-flex align-items-center">
+                                        Creator Name
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body text-primary">
+                                <h5 class="card-title">Article 1</h5>
+                                <div class="d-flex">
+                                    <div id="article-picture" class="mr-3">
+                                        <img src="assets/icons/se.png" style="height:150px;width:300px"
+                                            class="img-fluid border border-primary" alt="article-picz">
+                                    </div>
+                                    <div id="article-content">
+                                        <p class="card-text">Some quick example text to build on the card title and make
+                                            up
+                                            the bulk
+                                            of the card's content.</p>
+                                    </div>
+                                </div>
+                                <hr>
+                            </div>
+                        </div>
+                        <hr>
+                    </div>
+                    <div class="tab-pane fade" id="v-pills-profile" role="tabpanel"
+                        aria-labelledby="v-pills-profile-tab">
+                        Search Article by Tag
+                    </div>
+                    <div class="tab-pane fade" id="v-pills-messages" role="tabpanel"
+                        aria-labelledby="v-pills-messages-tab">
+                        Tag Setting di sini
+                    </div>
+                    <div class="tab-pane fade" id="v-pills-settings" role="tabpanel"
+                        aria-labelledby="v-pills-settings-tab">
+                        Halaman Update user profile
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- add new article form -->
+        <div v-if="addArticleForm === true" id="articleForm" class="row vh-100 vw-100">
+            <div class="col-sm d-flex justify-content-center overflow-auto rounded px-auto main-content">
+                <form class="container mt-3">
+                    <div class="form-group">
+                        <label for="title">
+                            <h3>Title</h3>
+                        </label>
+                        <!-- <h6 class="text-danger">{{errors.title}}</h6> -->
+                        <input v-model="title" type="text" class="form-control" id="title"
+                            placeholder="Enter a descriptive and unique title (max. 20 characters)">
+                    </div>
+                    <br>
+                    <div class="form-group">
+                        <label for="title">
+                            <h3>Description</h3>
+                        </label>
+                        <!-- <h6 class="text-danger">{{errors.description}}</h6> -->
+                        <input v-model="description" type="text" class="form-control" id="description"
+                            placeholder="this will appear in article's thumbnail (max. 20 characters)">
+                    </div>
+                    <br>
+                    <div class="form-group">
+                        <label for="file">
+                            <h3>Thumbnail Image</h3>
+                        </label>
+                        <!-- <h6 class="text-danger">{{errors.image}}</h6> -->
+                        <input @change="fileUpload" type="file" class="form-control" id="file">
+                    </div>
+                    <br>
+                    <div class="form-group">
+                        <label for="tags">
+                            <h3>Tags</h3>
+                        </label>
+                        <input v-model="tags" type="text" class="form-control" id="tags"
+                            placeholder="e.g. programming javascript vue">
+                    </div>
+                    <div class="form-group">
+                        <label for="content">
+                            <h3>Your Story</h3>
+                        </label>
+                        <!-- <h6 class="text-danger">{{errors.content}}</h6> -->
+                        <wysiwyg v-model="content" />
+                    </div>
+                    <button class="h5 btn btn-dark mt-2" type="submit" @click.prevent="createArticle">Post</button>
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+
+
+    <!-- Core -->
+    <script src="/assets/vendor/jquery/jquery.min.js"></script>
+    <script src="/assets/vendor/popper/popper.min.js"></script>
+    <script src="/assets/vendor/bootstrap/bootstrap.min.js"></script>
+    <!-- Theme JS -->
+    <script src="/assets/js/argon.min.js"></script>
+    <!-- vue cdn and other packages -->
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="script/wysiwyg.js"></script>
+    <script src="script/index.js"></script>
+</body>
+
+</html>
