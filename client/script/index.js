@@ -96,5 +96,8 @@ let app = new Vue({
             this.nav = true
             this.header = true
         }
+    },
+    components : {
+        wysiwyg: vueWysiwyg.default.component,
     }
 })

@@ -15,6 +15,8 @@
     <link href="/assets/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet">
     <!-- Theme CSS -->
     <link type="text/css" href="/assets/css/argon.min.css" rel="stylesheet">
+    <!-- WYSIWYG -->
+    <link rel="stylesheet" href="assets/css/wysiwyg.css">
 
     <title>Simple - WordPress</title>
 </head>
@@ -211,7 +213,7 @@
                                 </div>
                             </div>
                             <div class="card-body text-primary">
-                                <h5 class="card-title">Article 1</h5>
+                                <h5 class="card-title">Article 2</h5>
                                 <div class="d-flex">
                                     <div id="article-picture" class="mr-3">
                                         <img src="assets/icons/se.png" style="height:150px;width:300px"
@@ -289,7 +291,7 @@
                         <!-- <h6 class="text-danger">{{errors.content}}</h6> -->
                         <wysiwyg v-model="content" />
                     </div>
-                    <button class="h5 btn btn-dark mt-2" type="submit" @click.prevent="createArticle">Post</button>
+                    <button class="h5 btn btn-primary mt-2" type="submit" @click.prevent="createArticle">Post</button>
                 </form>
             </div>
         </div>
