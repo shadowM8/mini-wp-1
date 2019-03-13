@@ -32,9 +32,20 @@ module.exports = {
                             fullName: user.fullName
                         })
                         let token = jwtSign(payload)
-                        res.status(200).json({ token })
+                        res.status(200).json({ token, id:user._id })
                     }
                 }
+            })
+            .catch(err => {
+                console.log(err)
+                res.status(500).json({ message: `server error`, err })
+            })
+    },
+    getAllUser: (req, res) => {
+        User
+            .find({})
+            .then(users => {
+                res.status(200).json(users)
             })
             .catch(err => {
                 console.log(err)

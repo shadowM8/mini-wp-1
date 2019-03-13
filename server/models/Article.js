@@ -12,10 +12,15 @@ articleSchema = new Schema({
         type: String
     },
     image: {
-        type: String
+        type: String,
+        default : `https://wallpapercave.com/wp/7jKtgQb.jpg`
     },
-    users: {
+    user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     }
 }, { timestamps: true })
+
+const Article = mongoose.model('Article', articleSchema)
+
+module.exports = Article

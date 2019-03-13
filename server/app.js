@@ -14,8 +14,10 @@ app.use(express.urlencoded({ extended: false }))
 app.use(express.json())
 
 const userRoute = require('./routes/user.js')
+const articleRoute = require('./routes/article.js')
 
 app.use('/users',userRoute)
+app.use('/articles', articleRoute)
 
 
 app.listen(port, () => {
