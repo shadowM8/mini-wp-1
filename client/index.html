@@ -87,7 +87,7 @@
                             </form>
                             <hr>
                         <!-- ini artikel keseluruhan -->
-                        <div class="card border rounded mb-3" v-for="article in articles" v-if="articles.length > 0">
+                        <div class="card border rounded mb-3" v-for="article in articles" v-if="articles.length > 0 && searchResult.length === 0">
                             <div class="card-header">
                                 <div class="d-flex flex-row-reverse card-text">
                                     <div class="mx-2">
@@ -133,11 +133,59 @@
                             <hr>
                         </div>
                         <!-- jika tidak ada artikel -->
-                        <div class="card border rounded mb-3" v-if="articles.length === 0">
+                        <div class="card border rounded mb-3" v-if="articles.length === 0 && searchResult.length === 0">
                             <div id="article-content">
                                 <p class="card-text">No article in database!</p>
                             </div>
                         </div>
+                        <!-- jika ada hasil pencarian -->
+                        <div class="text-center " v-if="searchResult.length > 0"><h2>Search Result : </h2> </div>
+                        <div class="card border rounded mb-3" v-for="article in searchResult" v-if="searchResult.length > 0">
+                            <div class="card-header">
+                                <div class="d-flex flex-row-reverse card-text">
+                                    <div class="mx-2">
+                                        <img :src='article.author.profilePhoto' style="width:100px"
+                                            class="img-fluid border border-primary rounded-circle" alt="article-picz">
+                                    </div>
+                                    <div class="d-flex flex-column">
+                                        <div class="d-flex align-items-center">
+                                            Author : {{article.author.fullName}}
+                                        </div>
+                                        <div class="card-text">
+                                            Posted :
+                                            {{deDate(article.createdAt)}}
+                                        </div>
+                                    </div>
+                                    
+                                    
+                                </div>
+                                <button type="button" class="my-2 btn btn-outline-danger btn-sm align-self-end"
+                                        v-if='article.author._id.toString() == userId' @click="deleteArticle(article._id)">Delete this Article</button>
+                            </div>
+                            <div class="card-body text-primary">
+                                <a href="#" @click='readThisArticle(article._id)'>
+                                    <h3 class="card-title"><b>{{article.title}}</b></h3>
+                                </a>
+                                <div class="d-flex">
+                                    <div id="article-picture" class="mr-3">
+                                        <img :src='article.featured_image' style="height:150px;width:300px"
+                                            class="img-fluid border rounded border-primary" alt="article-picz">
+                                    </div>
+                                    <div class="d-flex flex-column">
+                                            <div id="article-content">
+                                                    <p class="card-text">Description : {{article.description}}</p>
+                                                </div>
+                                                
+                                                <div class="row mt-3left: 0" >
+                                                        <button v-for="tag in article.tags" v-if="tag != ''" type="button" class="badge badge-pill badge-secondary text-white article-caps m-2" style="background-color: lightgrey; font-size: 10px; ">{{ tag }}</button>
+                                                    </div>
+                                    </div>
+                                   
+                                </div>
+                            </div>
+                            <hr>
+                        </div>
+
                     </div>
 
                     

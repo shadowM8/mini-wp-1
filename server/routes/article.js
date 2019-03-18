@@ -11,6 +11,9 @@ router.get('/', articleController.readAll)
 
 
 router.get('/:id', articleController.readOne)
+
+router.use('/:id', authorize)
+
 router.put('/:id', articleController.update)
 router.delete('/:id', articleController.delete)
 

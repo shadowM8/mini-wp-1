@@ -44,6 +44,10 @@ Vue.component('add-article',{
                 .then(({ data }) => {
                     this.$emit('new-articles', data)
                     this.$emit('state','login')
+                    this.title = ''
+                    this.description = ''
+                    this.content = ''
+                    this.tags = []
                 })
                 .catch(err => {
                     // console.log(err.response)

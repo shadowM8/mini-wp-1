@@ -1,7 +1,7 @@
 const Article = require('../models/Article')
 
 function authorize(req, res, next){
-  console.log("PARAMS", req.params)
+  
   Article
     .findOne({
       _id: req.params.id

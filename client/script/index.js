@@ -1,9 +1,10 @@
-let serverUrl = 'http://35.197.158.62'
+let serverUrl = 'http://localhost:3000'
 
 let app = new Vue({
     el: '#app',
     data: {
         articles: [],
+        searchResult: [],
         isLogin: false,
         fullName: '',
         errorMsg: '',
@@ -44,6 +45,7 @@ let app = new Vue({
                 this.readOneArticle = false
                 this.editArticleForm = false
                 this.oneEditedArticle = false
+                this.searchResult = []
                 this.getAllArticle()
             } else if (state === 'logout') {
                 this.isLogin = false
@@ -79,7 +81,7 @@ let app = new Vue({
                 }
             })
                 .then(({ data }) => {
-                    this.articles = data
+                    this.searchResult = data
                 })
                 .catch(err => {
                     console.log(err.response.data.message)
@@ -87,7 +89,7 @@ let app = new Vue({
                 })
         },
         getArticleFromTag(keyword) {
-            this.articles = this.articles.filter(art => {
+            this.searchResult = this.articles.filter(art => {
                 return art.tags.join(' ').toLowerCase().match(keyword)
             })
         },
