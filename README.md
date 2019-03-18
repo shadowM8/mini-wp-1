@@ -8,24 +8,24 @@
 
 **user route**
 
-Route|HTTP|Header(s)|Require|Description|
-|---|---|---|---|---|
-|/users/register|POST|none|email = body.email(String), password = body.password(String), role = body.role(String), fullName = body.fullName(String)|register for new user|
-|/users/login|POST|none|email = body.email(String), password = body.password(String)|endpoint for user login into app|
-|/users/googleauth|POST|none|idToken = body.idToken(String)|endpoint for GoogleSignIn |
-|/users/|GET|token|none|fetch all user data (authenticated user only)|
+Route|HTTP|Header(s)|Request|Description|Response
+|---|---|---|---|---|---|
+|/users/register|POST|none|`body`: `{ email: 'anton@mail.com', password: 'secret' , fullName: 'anton wibisono' }`|register for new user| `201`: `{ _id: ObjectId(''), email: 'dimitri@mail.com', password: 'HashedPassword' }`
+|/users/login|POST|none|`body`: `{ email: 'anton@mail.com', password: 'secret'}`|endpoint for user login into app| `200`:`{token : ... }`
+|/users/googleauth|POST|none|`body`:`{idToken: 'hashed by google'}`|endpoint for GoogleSignIn |none
+|/users/|GET|token|none|fetch all user data (authenticated user only)|`200`:`[{_id: ObjectId(''), email: 'dimitri@mail.com', password: 'HashedPassword'}, {_id: ObjectId(''), email: 'dimitri@mail.com', password: 'HashedPassword'} ]`
 
 <br>
 
 **article route**
 
-Route|HTTP|Header(s)|Require|Description|
-|---|---|---|---|---|
-|/articles/|POST|token|title = body.title(String), description = body.description(String), content = body.content(String), tags = body.tags(String) , author = user.id(String)|create new article (registered user only)|
-|/articles/|GET|token| title = query.title(String)| get all articles  (registered user only)|
-|/articles/:id|GET|token| id = params.id(String)| find specific article (registered user only)|
-|/articles/:id|PUT|token| id = params.id(String), title = body.title(String), description = body.description(String), content = body.content(String), tags = body.tags(String) , author = user.id(String) | update specific article (owner of specific task only)|
-|/articles/:id|DELETE|token| id = params.id(String) | delete specific article (owner of specific task only)|
+Route|HTTP|Header(s)|Request|Description|Response
+|---|---|---|---|---|---|
+|/articles/|POST|token|`body`: `{ title: 'article title', description: 'article short description' , content: 'article content', tags: '[article tag, article tag, ...], author: 'user.id' }`|create new article (registered user only)|`201`:`{ _id: ObjectId(''), title: 'article title', description: 'article short description' , content: 'article content', tags: '[article tag, article tag, ...], author: 'user.id'}`
+|/articles/|GET|token|`query`:`{title: 'searched title'}` | get all articles  (registered user only)|`200`:`[{ _id: ObjectId(''),title: 'searched title, description: 'article short description' , content: 'article content', tags: '[article tag, article tag, ...], author: 'user.id'}]`
+|/articles/:id|GET|token|`params`:`{id: 'article id'}`| find specific article (registered user only)|`200`:`{ _id: ObjectId(''),title: 'searched title, description: 'article short description' , content: 'article content', tags: '[article tag, article tag, ...], author: 'user.id'}`
+|/articles/:id|PUT|token|`params`:`{id: 'article id'}`,`body`: `{ title: 'updated article title', description: ' updated article short description' , content: 'updated article content', tags: '[ updated article tag, article tag, ...], author: 'user.id' }` | update specific article (owner of specific task only)| `200`:`{ title: 'updated article title', description: ' updated article short description' , content: 'updated article content', tags: '[ updated article tag, article tag, ...], author: 'user.id' }`
+|/articles/:id|DELETE|token|`params`:`{id: 'article id'}`| delete specific article (owner of specific task only)|`200`:`{ title: 'deleted article title', description: ' deleted article short description' , content: 'deleted article content', tags: '[ deleted article tag, article tag, ...], author: 'user.id' }`
 
 <br>
 
