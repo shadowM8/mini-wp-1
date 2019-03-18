@@ -41,5 +41,5 @@ $ npm run dev
 ```
 And don't forget to fill the .env file 
 
-server : http://35.197.153.178 
-client : http://fancy-todo.greensnorlax.xyz/
+server : http://35.197.158.62 
+client : http://mini-wp.greensnorlax.xyz/

@@ -1,4 +1,4 @@
-let serverUrl = 'http://localhost:3000'
+let serverUrl = 'http://35.197.158.62'
 
 let app = new Vue({
     el: '#app',
@@ -22,7 +22,8 @@ let app = new Vue({
         oneEditedArticle: false,
         tags: [],
         temp: '',
-        searchword: ''
+        searchword: '',
+        tagword: ''
     },
     
     methods: {

@@ -10,7 +10,7 @@ Vue.component('custom-modal-register', {
     methods: {
         register: function () {
             axios
-                .post(`http://localhost:3000/users/register`, {
+                .post(`${serverUrl}/users/register`, {
                     email: this.email,
                     password: this.password,
                     fullName: this.fullName
