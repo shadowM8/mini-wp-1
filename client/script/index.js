@@ -5,8 +5,6 @@ let app = new Vue({
     data: {
         articles: [],
         isLogin: false,
-        email: '',
-        password: '',
         fullName: '',
         errorMsg: '',
         addArticleForm: false,
@@ -15,117 +13,82 @@ let app = new Vue({
         title: '',
         description: '',
         content: '',
+        image:'',
         userId: '',
         articleId: '',
         readOneArticle: false,
         oneArticle: null,
         editArticleForm: false,
-        oneEditedArticle: false
+        oneEditedArticle: false,
+        tags: [],
+        temp: '',
+        searchword: ''
     },
+    
     methods: {
-        register: function () {
-            axios
-                .post(`http://localhost:3000/users/register`, {
-                    email: this.email,
-                    password: this.password,
-                    fullName: this.fullName
-                })
-                .then(({ data }) => {
-                    console.log(data)
-                    this.email = ''
-                    this.password = ''
-                    this.fullName = ''
-                    // this.$emit('success-register','success')
-                    $('#exampleModal').modal('toggle')
-                    swal("User berhasil dibuat, silahkan login", {
-                        button: false,
-                        timer: 1500,
-                        icon: 'success'
-                    })
-                    // this.$emit('change-page', 'login')
-                })
-                .catch(({ message }) => {
-                    // console.log(message)
-                    this.errorMsg = message
-                    swal(`${this.errorMsg}`, {
-                        button: false,
-                        timer: 2000,
-                        icon: 'error'
-                    })
-                })
+        deDate (date) {
+            return new Date(date).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'})
         },
-        login() {
-            axios({
-                url: `${serverUrl}/users/login`,
-                method: 'post',
-                data: {
-                    email: this.email,
-                    password: this.password
-                }
-            })
-                .then(({ data }) => {
-                    swal("Login berhasil, selamat datang", {
-                        button: false,
-                        timer: 1500,
-                        icon: 'success'
-                    })
-                    localStorage.setItem('token', data.token)
-                    localStorage.setItem('userId', data.id)
-                    this.email = '',
-                        this.password = ''
-                    this.getAllArticle()
-                    this.isLogin = true
-                    this.nav = true
-                    this.header = true
-                    this.userId = data.id
-                    $('#exampleModal2').modal('toggle')
-                    // localStorage.setItem('id', data.id)
-                    // this.$emit('login', 'login')
-                    // this.$emit('login-status', true)
-                })
-                .catch(({ message }) => {
-                    this.errorMsg = message
-                })
+        setUserData(emittedData){
+            console.log(emittedData)
+            this.userId = emittedData.id
+            this.fullName = emittedData.fullName
+        },
+        webstate(state) {
+            if(state === 'login') {
+                this.isLogin = true
+                this.nav = true
+                this.header = true
+                this.addArticleForm = false
+                this.readOneArticle = false
+                this.editArticleForm = false
+                this.oneEditedArticle = false
+                this.getAllArticle()
+            } else if (state === 'logout') {
+                this.isLogin = false
+                this.nav = false
+                this.header = false
+            } else if (state === 'write-article') {
+                this.isLogin = true
+                this.nav = false
+                this.header = true
+                this.addArticleForm = true
+                this.readOneArticle = false
+                this.editArticleForm = false
+                this.oneEditedArticle = false
+            }
+        },
+        pushNewArticles(data) {
+            this.articles.push(data)
         },
         logout() {
             // let auth2 = gapi.auth2.getAuthInstance();
             // auth2.signOut().then(function () {
             //     console.log('User signed out.');
             // });
-            localStorage.removeItem('token')
-            localStorage.removeItem('userId')
-            this.isLogin = false
-            this.nav = false
-            this.header = false
+            
+            localStorage.clear()
+            this.webstate('logout')
         },
-        writeArticle() {
-            this.addArticleForm = true
-            this.nav = false
-            // this.header = false
-        },
-        submitArticle() {
+        getAllArticleSearch(keyword){
             axios({
-                url: `${serverUrl}/articles/`,
-                method: `post`,
-                data: {
-                    title: this.title,
-                    description: this.description,
-                    content: this.content
-                },
+                url: `${serverUrl}/articles?title=${keyword}`,
                 headers: {
                     token: localStorage.getItem('token')
                 }
             })
                 .then(({ data }) => {
-                    this.articles.push(data)
-                    this.addArticleForm = false
-                    this.nav = true
-                    this.getAllArticle()
+                    this.articles = data
                 })
                 .catch(err => {
                     console.log(err.response.data.message)
                     this.errorMessage = err.response.data.message
                 })
+        },
+        getArticleFromTag(keyword) {
+            this.articles = this.articles.filter(art => {
+                return art.tags.join(' ').toLowerCase().match(keyword)
+            })
         },
         getAllArticle() {
             axios({
@@ -150,10 +113,9 @@ let app = new Vue({
                 }
             })
                 .then(({ data }) => {
-                    console.log(data)
                     this.readOneArticle = true
                     this.nav = false
-                    this.header = false
+                    this.header = true
                     this.oneArticle = data
                 })
                 .catch(err => {
@@ -204,8 +166,7 @@ let app = new Vue({
                 });
 
         },
-        startEditArticle(id) {
-            this.nav = false
+        startEditArticle(id) {    
             this.readOneArticle = false
             axios({
                 url: `${serverUrl}/articles/${id}`,
@@ -217,9 +178,10 @@ let app = new Vue({
                 .then(({ data }) => {
                     this.editArticleForm = true
                     this.articleId = data._id
-                    this.title= data.title
-                    this.description= data.description
-                    this.content= data.content
+                    this.title = data.title
+                    this.description = data.description
+                    this.content = data.content,
+                    this.tags = data.tags
                 })
                 .catch(err => {
                     console.log(err.response.data.message)
@@ -243,7 +205,7 @@ let app = new Vue({
                     this.articles.push(data)
                     this.editArticleForm = false
                     this.nav = true
-                    this.getAllArticle()
+                    this.readThisArticle(data._id)
                 })
                 .catch(err => {
                     console.log(err.response.data.message)
@@ -253,15 +215,22 @@ let app = new Vue({
     },
     created() {
         if (localStorage.getItem('token')) {
-            console.log('MASUK CEK TOKEN, DAN TOKEN ADA');
-            this.isLogin = true
-            this.nav = true
-            this.header = true
+            
+            this.webstate('login')
             this.userId = localStorage.getItem('userId')
+            this.fullName = localStorage.getItem('fullName')
             this.getAllArticle()
         }
     },
     components: {
         wysiwyg: vueWysiwyg.default.component,
-    }
+    },
+    mounted() {
+        gapi.load('auth2', function(){
+            auth2 = gapi.auth2.init({
+              client_id: '671055566664-1ivqkltn9i3krrjjbj4vutdajefh7um1.apps.googleusercontent.com',
+              cookiepolicy: 'single_host_origin',
+            });
+        });
+    },
 })

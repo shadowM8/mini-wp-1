@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "omega-vector-231107",
+  "private_key_id": "0c5bb40f4d0857f0c6e8ea96af92c7471801a7bc",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDLBMdNFksGZiPK\nXZrk61wxxq8rj60w7dFM5beIRnVKH70EV5v0r6mHKlI988R82EhutX9u4XPkwY7C\n+JS46pZsAAMR6VG/71bBFOLRSIHXms4e5RKzJPTgsJQjbsmae1bRWMs5SUzixpx/\n2wHH/pX6PQIKbdumCIDwX/S53P5+qlL1k1Fv7eltjHB7CnQEAA8k7zAGONimPFNb\nePd8iiIfJTqiGevRqaXtUScNQHqQ2p8oxMgg2MPPH+mNDTDRj+sRvZ03CAwTSt5o\nXHkIGz/wGH7DNh9ZeO0qEAzNtjMGUsTgIvQsuA4m3eIONCkKH8DF64slemBfOKfy\n21yYOh2tAgMBAAECggEAHc8gD2DOV8xwBWLsnx+yzAk7B7ejK6vDn1mccuk7iAx0\ndbqCZvFTAEp1xGxyRY2BRyYlpat7V5OXCWgz+BnTx9xRlxPt4bN8BsIxEp8ll3l+\nudkTP5QV05cBzVkTR3hENV1nC4yIekTEzl4jGxE1xsYl8k+SoISfoAvK1G6PPJw1\nOrIRWPJwekptSMLGapbHNrsqNlc84/i+g9SCENA8ut8BMw3q3D+oKul4LxlMbpnM\nqaLHx9Mk8kDmKGJ8myxQ7jMBtXn+oYLsiNTc9kpWbKvR0fmg2MDrf611SpKxCcxJ\nYT8SsMdvvwmiQgO+Gl3oRNmBG5zLVxBq7U0WlsxTcQKBgQDlQUvFf3/0z0wm6NwX\nSkdqLU1v9YJgifg9dTMsSep26KjNyoyYNISh6xOCZJRGoBshSGqwM+MPRWXM8y4y\nmGygKOjCAy74dKszAlNK1eQbv8YEH+JqtzbLQYxrj6zYi4GNDepLruFM8Cighkxx\n+8glrqt0kjJLNRthx5Us9JN8vQKBgQDis+6wfEpZPYDAq6HuJrDw9dbdqxaYYAIs\n6N9drOYxn+/BswdhMMmfA07VTvWFiwXdVPa5eStlvaQ0vH3o+CQAYrzShFM81BbA\ntTsdQkT0y07ymWRTBYk0NzIOrO1zLnZ+tlk/0R/ygRaapHUcNOyAr8FGyN0mkt2r\n9kQbdqPLsQKBgGdNa/I7iJHskvj5dqs7+kAa18j6TNxpbyVqWTu8tt0L63yHp6Cy\nEY3QmoLoBXRpkrAFrKVnTApGkB+w+IEt88ybgn5h5tln4PjkNFoFVXs3h+e14lWJ\n5zPhfn+9RvpwqljAC3I9BCKiGPx0Z5/4/3ATbAjkE6uV65e80jhmoMrVAoGBAJXP\nKbBeshL+3ZJ02PEziEHzcyXQ5YGUEFv1F4Yjt4qbkiiCUiIbx2DZIsM7BmxVTm7Q\nsqomNFNrWpOu69WEBOZsWTMUVp0f2llGaeYP4NmTcHxIeU+TnPNwdhfUlqVC0vMx\nNRFC9MWgIHvYqbsWDiOMAUDxg5L2Ap6cgq1TXTJBAoGAZqQ48mq3kl7RPH4UE6Ta\nRjMA4kpX7F7r/UoINMAB3++BcN//ZHQ4X01esxrtbbRti+BJckW6lGe8FUK7t5bi\ng+hfX98T5T6FMx9jSx+oxAWd667RgnGx9rz60O4Nn8mJPVePLnyRJDSmoaPmeNVt\nyPb/+AzAf+Bscmqb34Bw33E=\n-----END PRIVATE KEY-----\n",
+  "client_email": "mini-wp-anton@omega-vector-231107.iam.gserviceaccount.com",
+  "client_id": "115417094914175938811",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/mini-wp-anton%40omega-vector-231107.iam.gserviceaccount.com"
+}

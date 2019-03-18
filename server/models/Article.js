@@ -11,11 +11,12 @@ articleSchema = new Schema({
     content: {
         type: String
     },
-    image: {
+    featured_image: {
         type: String,
         default : `https://wallpapercave.com/wp/7jKtgQb.jpg`
     },
-    user: {
+    tags: [String],
+    author: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     }

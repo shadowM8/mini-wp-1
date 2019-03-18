@@ -17,6 +17,9 @@
     <link type="text/css" href="/assets/css/argon.min.css" rel="stylesheet">
     <!-- WYSIWYG -->
     <link rel="stylesheet" href="assets/css/wysiwyg.css">
+    <!-- google sign in -->
+    <meta name="google-signin-client_id"
+    content="671055566664-1ivqkltn9i3krrjjbj4vutdajefh7um1.apps.googleusercontent.com">
 
     <title>Simple - WordPress</title>
 </head>
@@ -24,122 +27,33 @@
 <body>
     <div id="app">
         <!-- auth -->
-        <div id="auth" v-if="isLogin === false"
-            class="container-fluid bg-primary d-flex justify-content-center align-items-center"
-            style="min-height:100vh">
-            <div class="d-flex flex-column" style="width:40%">
-                <div class="d-flex flex-column  ">
-                    <img src="/assets/img/picture/undraw_live_collaboration_2r4y.svg" alt="" style="width:40%;"
-                        class="d-flex flex-column align-self-center  " />
-                    <h1 style="color:white;" class="d-flex align-self-center"><i class="fas fa-feather-alt"></i>
-                        Simple Word-Press</h1>
-                    <h6 style="color:white;" class="d-flex align-self-center">Simple-WordPress web-app built with
-                        mongoose, vue & express</h6>
-                    <button type="button" class="btn btn-warning mt-2" data-toggle="modal"
-                        data-target="#exampleModal" style="width: 100%;">Create an
-                        account</button>
-                    <button type="button" class="btn btn-info mt-2" data-toggle="modal"
-                        data-target="#exampleModal2">Sign
-                        In</button>
-                    <!-- <h6 style="color:white;" class="d-flex align-self-center mt-3 mb-3">or</h6> -->
-                    <!-- <div class="g-signin2" data-onsuccess="onSignIn" data-width="400" data-longtitle="true"></div> -->
-                </div>
-            </div>
-        </div>
+        <auth :is-login='isLogin' @state="webstate" @user-data="setUserData" ></auth>
 
         <!-- registration form modal -->
-        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-            aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Register</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <form id="registrationForm" @submit.prevent="register">
-                            <h6 id="registrationError"></h6>
-                            <div class="form-group">
-                                <label for="email1" class="col-form-label">email</label>
-                                <input type="text" class="form-control" id="email1" v-model="email"
-                                    placeholder="e.g. johnDoe1@gmail.com">
-                            </div>
-                            <div class="form-group">
-                                <label for="password1" class="col-form-label">password</label>
-                                <input type="password" class="form-control" id="password1" v-model="password"
-                                    placeholder="enter your password here">
-                            </div>
-                            <div class="form-group">
-                                <label for="fullname" class="col-form-label">full name</label>
-                                <input type="text" class="form-control" id="fullName" v-model="fullName"
-                                    placeholder="enter your fullname here">
-                            </div>
-
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button type="submit button" class="btn btn-primary">Create Account</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <custom-modal-register></custom-modal-register>
 
         <!-- login form modal -->
-        <div class="modal fade" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel2"
-            aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel2">Login</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <form id="loginForm" @submit.prevent="login">
-                            <h6 id="loginError" v-if="errorMsg">{{errorMsg}}</h6>
-                            <div class="form-group">
-                                <label for="email2" class="col-form-label">email</label>
-                                <input type="text" class="form-control" id="email2" v-model="email">
-                            </div>
-                            <div class="form-group">
-                                <label for="password2" class="col-form-label">password</label>
-                                <input type="password" class="form-control" id="password2" v-model="password">
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button type="submit button" class="btn btn-primary">Sign In</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <custom-modal-login @state="webstate" @user-data="setUserData" ></custom-modal-login>
 
         <!-- header nav -->
         <nav id="header" v-if="header === true" class="navbar navbar-dark shadow "
             style="background-color:rgb(96, 117, 225)">
-            <a class="navbar-brand" href="#" style="font-size:20px"><i class="fas fa-feather-alt"></i> Simple-WP </a>
+            <a class="navbar-brand" href="#" style="font-size:20px" @click="webstate('login')"><i class="fas fa-feather-alt"></i> Simple-WP </a>
+            <button type="button" class="btn rounded" style="background-color:rgb(13, 61, 94); color:white;"
+                @click="webstate('write-article')">
+                <i class="fas fa-newspaper"></i> Write new Article</button>
             <!-- navbar search bar -->
-            <form class="form-inline my-1 my-lg-0">
+            <form class="form-inline my-1 my-lg-0" @submit.prevent="getAllArticleSearch(searchword)">
                 <input class="form-control mr-sm-2" type="search" placeholder="Search by article title..."
-                    aria-label="Search">
+                    aria-label="Search" v-model="searchword">
                 <button class="btn my-1 my-sm-0" style="background-color:rgb(13, 61, 94); color:white;"
                     type="submit">Search</button>
-            </form>
-            <button type="button" class="btn rounded" style="background-color:rgb(13, 61, 94); color:white;"
-                @click="writeArticle">
-                <i class="fas fa-newspaper"></i> Write new Article</button>
-
+            </form> 
             <div class="btn-group">
                 <button type="button" class="btn dropdown-toggle" style="background-color: #CCE6F4;"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <i class="fas fa-user"></i>
+                    <i class="fas fa-user"> {{fullName}}</i>
                 </button>
-
                 <div class="dropdown-menu dropdown-menu-right">
                     <button class="dropdown-item" type="button">Update profile</button>
                     <button class="dropdown-item" type="button" @click="logout">Log out</button>
@@ -154,10 +68,8 @@
                     aria-orientation="vertical">
                     <a class="nav-link active my-1" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home"
                         role="tab" aria-controls="v-pills-home" aria-selected="true">All Article</a>
-                    <a class="nav-link my-1" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-profile"
-                        role="tab" aria-controls="v-pills-profile" aria-selected="false">Tag</a>
-                    <a class="nav-link my-1" id="v-pills-messages-tab" data-toggle="pill" href="#v-pills-messages"
-                        role="tab" aria-controls="v-pills-messages" aria-selected="false">Tag Setting</a>
+                    
+                    
                     <a class="nav-link my-1" id="v-pills-settings-tab" data-toggle="pill" href="#v-pills-settings"
                         role="tab" aria-controls="v-pills-settings" aria-selected="false">Settings</a>
                 </div>
@@ -167,32 +79,55 @@
                     style="overflow-y:auto;max-height:500px">
                     <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel"
                         aria-labelledby="v-pills-home-tab">
+                        <form class="form-inline my-1 my-lg-0" @submit.prevent="getArticleFromTag(tagword)">
+                                <input class="form-control mr-sm-2" type="search" placeholder="Search by article tag..."
+                                    aria-label="Search" v-model="tagword">
+                                <button class="btn my-1 my-sm-0" style="background-color:rgb(13, 61, 94); color:white;"
+                                    type="submit">Search</button>
+                            </form>
+                            <hr>
+                        <!-- ini artikel keseluruhan -->
                         <div class="card border rounded mb-3" v-for="article in articles" v-if="articles.length > 0">
                             <div class="card-header">
-                                <div class="d-flex flex-column">
-                                    <div class="mr-2">
-                                        <img :src='article.user.profilePhoto' style="width:100px"
+                                <div class="d-flex flex-row-reverse card-text">
+                                    <div class="mx-2">
+                                        <img :src='article.author.profilePhoto' style="width:100px"
                                             class="img-fluid border border-primary rounded-circle" alt="article-picz">
                                     </div>
-                                    <div class="d-flex align-items-center">
-                                        {{article.user.fullName}}
+                                    <div class="d-flex flex-column">
+                                        <div class="d-flex align-items-center">
+                                            Author : {{article.author.fullName}}
+                                        </div>
+                                        <div class="card-text">
+                                            Posted :
+                                            {{deDate(article.createdAt)}}
+                                        </div>
                                     </div>
-                                    <button type="button" class=" btn btn-outline-danger btn-sm align-self-end"
-                                        v-if='article.user._id.toString() == userId' @click="deleteArticle(article._id)">Delete this Article</button>
+                                    
+                                    
                                 </div>
+                                <button type="button" class="my-2 btn btn-outline-danger btn-sm align-self-end"
+                                        v-if='article.author._id.toString() == userId' @click="deleteArticle(article._id)">Delete this Article</button>
                             </div>
                             <div class="card-body text-primary">
-                                <a @click='readThisArticle(article._id)'>
-                                    <h5 class="card-title">{{article.title}}</h5>
+                                <a href="#" @click='readThisArticle(article._id)'>
+                                    <h3 class="card-title"><b>{{article.title}}</b></h3>
                                 </a>
                                 <div class="d-flex">
                                     <div id="article-picture" class="mr-3">
-                                        <img :src='article.image' style="height:150px;width:300px"
+                                        <img :src='article.featured_image' style="height:150px;width:300px"
                                             class="img-fluid border rounded border-primary" alt="article-picz">
                                     </div>
-                                    <div id="article-content">
-                                        <p class="card-text">{{article.description}}</p>
+                                    <div class="d-flex flex-column">
+                                            <div id="article-content">
+                                                    <p class="card-text">Description : {{article.description}}</p>
+                                                </div>
+                                                
+                                                <div class="row mt-3left: 0" >
+                                                        <button v-for="tag in article.tags" v-if="tag != ''" type="button" class="badge badge-pill badge-secondary text-white article-caps m-2" style="background-color: lightgrey; font-size: 10px; ">{{ tag }}</button>
+                                                    </div>
                                     </div>
+                                   
                                 </div>
                             </div>
                             <hr>
@@ -205,14 +140,8 @@
                         </div>
                     </div>
 
-                    <div class="tab-pane fade" id="v-pills-profile" role="tabpanel"
-                        aria-labelledby="v-pills-profile-tab">
-                        Search Article by Tag
-                    </div>
-                    <div class="tab-pane fade" id="v-pills-messages" role="tabpanel"
-                        aria-labelledby="v-pills-messages-tab">
-                        Tag Setting di sini
-                    </div>
+                    
+                    
                     <div class="tab-pane fade" id="v-pills-settings" role="tabpanel"
                         aria-labelledby="v-pills-settings-tab">
                         Halaman Update user profile
@@ -222,139 +151,88 @@
         </div>
 
         <!-- add new article form -->
-        <div v-if="addArticleForm === true" id="articleForm" class="row vh-100 vw-100">
-            <div class="col-sm d-flex justify-content-center overflow-auto rounded px-auto main-content">
-                <form class="container mt-3" @submit.prevent="submitArticle">
-                    <div class="form-group">
-                        <label for="title">
-                            <h3>Title</h3>
-                        </label>
-                        <!-- <h6 class="text-danger">{{errors.title}}</h6> -->
-                        <input v-model="title" type="text" class="form-control" id="title"
-                            placeholder="Enter a descriptive and unique title (max. 20 characters)">
-                    </div>
-                    <br>
-                    <div class="form-group">
-                        <label for="title">
-                            <h3>Description</h3>
-                        </label>
-                        <!-- <h6 class="text-danger">{{errors.description}}</h6> -->
-                        <input v-model="description" type="text" class="form-control" id="description"
-                            placeholder="this will appear in article's thumbnail (max. 20 characters)">
-                    </div>
-                    <br>
-                    <!-- <div class="form-group">
-                        <label for="file">
-                            <h3>Thumbnail Image</h3>
-                        </label>
-                        
-                        <input @change="fileUpload" type="file" class="form-control" id="file">
-                    </div> -->
-                    <br>
-                    <!-- <div class="form-group">
-                        <label for="tags">
-                            <h3>Tags</h3>
-                        </label>
-                        <input v-model="tags" type="text" class="form-control" id="tags"
-                            placeholder="e.g. programming javascript vue">
-                    </div> -->
-                    <div class="form-group">
-                        <label for="content">
-                            <h3>Your Story</h3>
-                        </label>
-                        <!-- <h6 class="text-danger">{{errors.content}}</h6> -->
-                        <wysiwyg v-model="content" />
-                    </div>
-                    <button class="h5 btn btn-primary mt-2" type="submit">Post</button>
-                </form>
+        <add-article :add-article-form="addArticleForm" @state="webstate" @new-articles="pushNewArticles"></add-article>
+
+        <!-- One Article to Read -->
+        <div v-if="readOneArticle === true" class="row vh-100 vw-100 container-fluid" >
+            <div class="card border rounded mb-3" style="min-width:100%" >
+                        <div class="card-header">
+                            <div class="d-flex flex-row-reverse">
+                                    <div class="mx-2">
+                                            <img :src='oneArticle.author.profilePhoto' style="width:100px"
+                                                class="img-fluid border border-primary rounded-circle" alt="article-picz">
+                                    </div>
+                                    <div class="d-flex flex-column">
+                                        <div class="d-flex align-items-center">
+                                            Author : {{oneArticle.author.fullName}}
+                                        </div>
+                                        <div class="card-text">
+                                            Posted :
+                                            {{deDate(oneArticle.createdAt)}}
+                                        </div>
+                                    </div>
+                            </div>
+                                <button type="button" class=" btn btn-outline-danger btn-sm align-self-end"
+                                    v-if='oneArticle.author._id.toString() == userId' @click='startEditArticle(oneArticle._id)'>Edit this Article</button>
+                                <button type="button" class=" btn btn-outline-warning btn-sm align-self-end"
+                                    @click="webstate('login')">Back</button>
+                        </div>
+                <div class="card-body text-primary">
+                        <h3 class="card-title text-center"><b>{{oneArticle.title}}</b></h3>
+                        <div class="d-flex flex-column">
+                                <div id="article-picture" class="my-1 text-center">
+                                    <img :src='oneArticle.featured_image' style="width:50%"
+                                        class="img-fluid border rounded border-primary" alt="article-picz">
+                                </div>
+                                <div id="article-content" class="">
+                                    <p class="card-text text-justify" v-html='oneArticle.content'></p>
+                                </div>
+                                <hr style="margin-top: 0">
+                                <div class="row mx-auto">
+                                    <button v-if="tag" v-for="tag in oneArticle.tags" type="button" class="btn-sm text-white article-caps m-2" style="background-color: lightgrey; font-size: 15px">{{ tag }}</button>
+                                </div>
+                        </div>
+                </div>  
             </div>
         </div>
 
         <!-- edit article form -->
         <div v-if="editArticleForm === true"  class="row vh-100 vw-100">
-            <div class="col-sm d-flex justify-content-center overflow-auto rounded px-auto main-content">
-                <form class="container mt-3" @submit.prevent="submitEditArticle(articleId)">
-                    <div class="form-group">
-                        <label for="title">
-                            <h3>Title</h3>
-                        </label>
-                        <!-- <h6 class="text-danger">{{errors.title}}</h6> -->
-                        <input v-model="title" type="text" class="form-control" id="title"
-                            placeholder="Enter a descriptive and unique title (max. 20 characters)">
-                    </div>
-                    <br>
-                    <div class="form-group">
-                        <label for="title">
-                            <h3>Description</h3>
-                        </label>
-                        <!-- <h6 class="text-danger">{{errors.description}}</h6> -->
-                        <input v-model="description" type="text" class="form-control" id="description"
-                            placeholder="this will appear in article's thumbnail (max. 20 characters)">
-                    </div>
-                    <br>
-                    <!-- <div class="form-group">
-                        <label for="file">
-                            <h3>Thumbnail Image</h3>
-                        </label>
+                <div class="col-sm d-flex flex-column justify-content-center overflow-auto rounded px-auto main-content">
+                    <form class="container mt-3" @submit.prevent="submitEditArticle(articleId)">
+                        <div class="form-group">
+                            <label for="title">
+                                <h3>Title</h3>
+                            </label>
+                            <input v-model="title" type="text" class="form-control" id="title"
+                                placeholder="Enter a descriptive and unique title (max. 20 characters)">
+                        </div>
+                        <br>
+                        <div class="form-group">
+                            <label for="title">
+                                <h3>Description</h3>
+                            </label>
+                            <input v-model="description" type="text" class="form-control" id="description"
+                                placeholder="this will appear in article's thumbnail (max. 20 characters)">
+                        </div>
+                        <br>
                         
-                        <input @change="fileUpload" type="file" class="form-control" id="file">
-                    </div> -->
-                    <br>
-                    <!-- <div class="form-group">
-                        <label for="tags">
-                            <h3>Tags</h3>
-                        </label>
-                        <input v-model="tags" type="text" class="form-control" id="tags"
-                            placeholder="e.g. programming javascript vue">
-                    </div> -->
-                    <div class="form-group">
-                        <label for="content">
-                            <h3>Your Story</h3>
-                        </label>
-                        <!-- <h6 class="text-danger">{{errors.content}}</h6> -->
-                        <wysiwyg v-model="content" />
-                    </div>
-                    <button class="h5 btn btn-primary mt-2" type="submit">Post</button>
-                </form>
-            </div>
-        </div>
-
-        <!-- One Article to Read -->
-        <div v-if="readOneArticle === true" class="row vh-100 vw-100" >
-            <div class="card border rounded mb-3" style="min-width:100%" >
-                <div class="card-header">
-                    <div class="d-flex flex-column">
-                        <div class="mr-2">
-                            <img :src='oneArticle.user.profilePhoto' style="width:100px"
-                                class="img-fluid border border-primary rounded-circle" alt="article-picz">
+                        <div class="form-group">
+                            <label for="content">
+                                <h3>Your Story</h3>
+                            </label>   
+                            <wysiwyg v-model="content" />
                         </div>
-                        <div class="d-flex align-items-center">
-                            {{oneArticle.user.fullName}}
-                        </div>
-                        <button type="button" class=" btn btn-outline-danger btn-sm align-self-end"
-                            v-if='oneArticle.user._id.toString() == userId' @click='startEditArticle(oneArticle._id)'>Edit this Article</button>
-                        <button type="button" class=" btn btn-outline-warning btn-sm align-self-end"
-                            @click="backToHome">Back</button>
-                    </div>
+                        <button class="h5 btn btn-primary mt-2" type="submit">Post</button>
+                        <button class="h5 btn btn-danger mt-2" @click="readThisArticle(article._id)">Cancel Edit - Back to Article</button>
+                    </form>
                 </div>
-                <div class="card-body text-primary">
-                    
-                        <h5 class="card-title">{{oneArticle.title}}</h5>
-                    
-                    <div class="d-flex">
-                        <div id="article-picture" class="mr-3 col-4">
-                            <img :src='oneArticle.image' style="height:150px;width:300px"
-                                class="img-fluid border rounded border-primary" alt="article-picz">
-                        </div>
-                        <div id="article-content" class="col-7">
-                            <p class="card-text" v-html='oneArticle.content'></p>
-                        </div>
-                    </div>
-                </div>
-                <hr>
-            </div>
         </div>
-
+   
+    
+    
+    
+    
     </div>
 
 
@@ -370,6 +248,14 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="script/wysiwyg.js"></script>
+    <!-- google script -->
+    <script src="https://apis.google.com/js/platform.js"></script>
+    <!-- components -->
+    <script src="script/components/auth.js"></script>
+    <script src="script/components/custom-modal-login.js"></script>
+    <script src="script/components/custom-modal-register.js"></script>
+    <script src="script/components/add-article.js"></script>
+    <!-- vue instance -->
     <script src="script/index.js"></script>
 </body>
 

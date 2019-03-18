@@ -7,7 +7,9 @@ module.exports = {
                 title: req.body.title,
                 description: req.body.description,
                 content: req.body.content,
-                user: req.user.id
+                author: req.user.id,
+                featured_image: req.file.cloudStoragePublicUrl,
+                tags: req.body.tags.split(',')
             })
             .then(article => {
                 res.status(201).json(article)
@@ -19,7 +21,7 @@ module.exports = {
     },
     readAll: (req, res) => {
         Article
-            .find({}).sort({ createdAt: 'desc' }).populate('user')
+            .find({}).sort({ createdAt: 'desc' }).populate('author')
             .then(articles => {
                 if (req.query.title) {
                     articles = articles.filter(article => {
@@ -36,7 +38,7 @@ module.exports = {
     },
     readOne: (req, res) => {
         Article
-            .findOne({ _id: req.params.id }).populate('user')
+            .findOne({ _id: req.params.id }).populate('author')
             .then(article => {
                 if (!article) res.status(400).json({ message: `article not found` })
                 else res.status(200).json(article)
